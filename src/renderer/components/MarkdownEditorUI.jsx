@@ -12,11 +12,11 @@ export default class MarkDownEditorUI extends React.Component {
   }
 
   componentDidMount() {
-    console.log("hello23");
     ipcRenderer.on("REQUEST_TEXT", () => {
       ipcRenderer.send("REPLY_TEXT", this.state.text);
     });
     ipcRenderer.on("SEND_TEXT", (_e, text) => {
+      console.log(text);
       this.setState({ text });
     });
   }
@@ -35,7 +35,7 @@ export default class MarkDownEditorUI extends React.Component {
         <Editor
           className={style.editorArea}
           value={this.state.text}
-          onChange={(event)=>this.onChangeText()}
+          onChange={(event)=>this.onChangeText(event)}
         />
         <Previewer
           className={style.previewerArea}

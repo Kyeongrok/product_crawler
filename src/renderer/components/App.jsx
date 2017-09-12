@@ -1,5 +1,7 @@
 import React from "react";
 import { ipcRenderer } from "electron";
+import {Grid, Row, Panel, Table, Button, FormControl, Col, Label} from 'react-bootstrap';
+
 
 export default class Hello extends React.Component {
   constructor(props) {
@@ -12,7 +14,6 @@ export default class Hello extends React.Component {
     };
   }
   componentDidMount() {
-    console.log("hello23");
     ipcRenderer.on("REQUEST_TEXT", () => {
       ipcRenderer.send("REPLY_TEXT", this.state.name);
     });
@@ -20,27 +21,33 @@ export default class Hello extends React.Component {
       this.setState({ text });
     });
   }
-  handleClickButton(){
 
-    ipcRenderer.on("REQUEST_TEXT", () => {
-      ipcRenderer.send("REPLY_TEXT", this.state.name);
-    });
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners();
+  }
+
+  handleClickButton(event){
     ipcRenderer.on("SEND_TEXT", (_e, text) => {
       this.setState({ text });
-      console.log("hello");
-      this.setState({status:"request"})
     });
 
   }
   render() {
     return (
-      <div>
+      <div className="App">
+        <Grid>
+          <Row className="show-grid">
+            <Panel>
 
-        <p>{this.state.name}</p>
-        <p>{this.state.status}</p>
-        <p>hello</p>
+              <p>{this.state.name}</p>
+              <p>{this.state.status}</p>
+              <p>hello</p>
 
-        <button onClick={(event)=>this.handleClickButton(event)}>hello</button>
+              <button onClick={(event)=>this.handleClickButton(event)}>hello</button>
+            </Panel>
+          </Row>
+
+        </Grid>
       </div>
     )
   }

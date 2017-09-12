@@ -30,7 +30,10 @@ app.on("activate", (_e, hasVisibleWindows) => {
   }
 });
 
-let printHello = () => console.log("hello");
+let printHello = () => {
+  let hello = "hello " + "kyeongrok";
+  mainWindow.sendText(hello);
+}
 
 let saveAsNewFile = () => {
   return Promise.all([ showSaveAsNewFileDialog(), mainWindow.requestText() ])

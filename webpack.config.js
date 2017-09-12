@@ -17,7 +17,8 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: [ "style-loader", "css-loader?modules" ]
-      }
+      },
+      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ]
   },
   entry: {
