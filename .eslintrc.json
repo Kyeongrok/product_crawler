@@ -1,0 +1,27 @@
+{
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:import/errors"],
+  "plugins": ["react"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "it": false,
+    "beforeEach": false,
+    "describe": false,
+    "afterEach": false
+  },
+  "rules": {
+    "react/prop-types": "off",
+    "react/jsx-no-bind": 2,
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "double"],
+    "import/prefer-default-export": 2,
+    "import/no-unresolved": 0,
+    "no-console": 0
+  }
+}
