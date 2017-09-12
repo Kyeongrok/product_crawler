@@ -41,6 +41,7 @@ export default class Hello extends React.Component {
 
               <p>{this.state.name}</p>
               <p>{this.state.status}</p>
+              <p>text:{this.state.text}</p>
               <p>hello</p>
 
               <button onClick={(event)=>this.handleClickButton(event)}>hello</button>

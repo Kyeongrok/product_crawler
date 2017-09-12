@@ -6,10 +6,8 @@ function setAppMenu(options) {
       label: "File",
       submenu: [
         { label: "printHello", click: () => options.printHello() },
-        { label: "Open", accelerator: "CmdOrCtrl+O", click: () => options.openFile() },
-        { label: "Save", accelerator: "CmdOrCtrl+S", click: () => options.saveFile() },
-        { label: "Save As...", click: () => options.saveAsNewFile() },
-        { label: "Export PDF", click: () => options.exportPDF() }
+        { label: "digitec", click: () => options.digitecService() },
+
       ]
     },
     {
