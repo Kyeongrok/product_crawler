@@ -22,6 +22,8 @@
     "quotes": ["error", "single"],
     "import/prefer-default-export": 2,
     "import/no-unresolved": 0,
+    "camelcase": "error",
+    "no-var": "error",
     "no-console": 0
   }
 }
