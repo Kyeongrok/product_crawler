@@ -1,33 +1,33 @@
 module.exports = {
-  target: "electron",
+  target: 'electron',
   node: {
     __dirname: false,
     __filename: false
   },
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,
-        loaders: [ "style-loader", "css-loader?modules" ]
+        loaders: [ 'style-loader', 'css-loader?modules' ]
       },
       { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ]
   },
   entry: {
-    "main/index": "./src/main/index.js",
-    "renderer/app": "./src/renderer/app.jsx",
-    "renderer/pdf": "./src/renderer/pdf.jsx"
+    'main/index': './src/main/index.js',
+    'renderer/app': './src/renderer/app.jsx',
+    //"renderer/pdf": "./src/renderer/pdf.jsx"
   },
   output: {
-    filename: "dist/[name].js"
+    filename: 'dist/[name].js'
   },
-  devtool: "source-map"
+  devtool: 'source-map'
 };

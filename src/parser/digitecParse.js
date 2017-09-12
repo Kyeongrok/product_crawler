@@ -1,3 +1,5 @@
+const client = require('cheerio-httpcli');
+
 const getProductInfo = (productContent) => {
   const productInfo = {};
   const currency = productContent.children[1].children[1].children[0].data;
@@ -14,4 +16,16 @@ const getProductInfo = (productContent) => {
   return productInfo;
 };
 
-module.exports.getProductInfo = getProductInfo;
+const parse = () => {
+  const string = client.fetchSync('https://www.digitec.ch/de/s1/producttype/tv-4?tagIds=538&take=10');
+  const productContent = string.$('.product-content');
+
+  const result = { status: 'ok', list: [] };
+  for (let i = 0; i < productContent.length; i += 1) {
+    result.list.push(getProductInfo(productContent[i]));
+  }
+
+  return result;
+}
+
+export default parse();

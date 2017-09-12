@@ -1,14 +1,14 @@
-import { BrowserWindow, shell } from "electron";
-import { ipcMain } from "electron";
+import { BrowserWindow, shell } from 'electron';
+import { ipcMain } from 'electron';
 
 class MainWindow {
   constructor() {
     this.window = new BrowserWindow({ width: 800, height: 600 });
     this.window.loadURL(`file://${__dirname}/../../index.html`);
-    this.window.on("closed", () => {
+    this.window.on('closed', () => {
       this.window = null;
     });
-    this.window.webContents.on("will-navigate", (e, url) => {
+    this.window.webContents.on('will-navigate', (e, url) => {
       e.preventDefault();
       shell.openExternal(url);
     });
@@ -16,14 +16,14 @@ class MainWindow {
 
   requestText() {
     return new Promise((resolve) => {
-      console.log("message");
-      this.window.webContents.send("REQUEST_TEXT");
-      ipcMain.once("REPLY_TEXT", (_e, text) => resolve(text));
+      console.log('message');
+      this.window.webContents.send('REQUEST_TEXT');
+      ipcMain.once('REPLY_TEXT', (_e, text) => resolve(text));
     });
   }
 
   sendText(text) {
-    this.window.webContents.send("SEND_TEXT", text);
+    this.window.webContents.send('SEND_TEXT', text);
   }
 }
 

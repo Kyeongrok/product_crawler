@@ -11,15 +11,15 @@
   },
   "globals": {
     "it": false,
-    "beforeEach": false,
-    "describe": false,
-    "afterEach": false
+    "beforeEach": true,
+    "describe": true,
+    "afterEach": true
   },
   "rules": {
     "react/prop-types": "off",
     "react/jsx-no-bind": 2,
-    "object-curly-spacing": ["error", "always"],
-    "quotes": ["error", "double"],
+    "arrow-spacing": "error",
+    "quotes": ["error", "single"],
     "import/prefer-default-export": 2,
     "import/no-unresolved": 0,
     "no-console": 0

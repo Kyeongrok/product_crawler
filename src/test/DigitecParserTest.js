@@ -1,6 +1,6 @@
 const client = require('cheerio-httpcli');
 
-const digitecParser = require('../parser/DigitecParser');
+const digitecParser = require('../parser/digitecParse');
 
 const string = client.fetchSync('https://www.digitec.ch/de/s1/producttype/tv-4?tagIds=538&take=10');
 const productContent = string.$('.product-content');
