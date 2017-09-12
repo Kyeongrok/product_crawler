@@ -1,32 +1,31 @@
-import { app, Menu, BrowserWindow } from "electron";
+import { app, Menu, BrowserWindow } from 'electron';
 
 function setAppMenu(options) {
   const template = [
     {
-      label: "File",
+      label: 'File',
       submenu: [
-        { label: "printHello", click: () => options.printHello() },
-        { label: "digitec", click: () => options.digitecService() },
-
+        { label: 'digitec', click: () => options.parseDigitec() },
+        { label: 'conforma', click: () => options.parseConforma() }
       ]
     },
     {
-      label: "View",
+      label: 'View',
       submenu: [
         {
-          label: "Toggle DevTools",
-          accelerator: "Alt+Command+I",
+          label: 'Toggle DevTools',
+          accelerator: 'Alt+Command+I',
           click: () => BrowserWindow.getFocusedWindow().toggleDevTools()
         }
       ]
     }
   ];
-  if (process.platform === "darwin" ) {
+  if (process.platform === 'darwin' ) {
     template.unshift(
       {
-        label: "MarkdownEditor",
+        label: 'MarkdownEditor',
         submenu: [
-          { label: "Quit", accelerator: "CmdOrCtrl+Q", click: () => app.quit() }
+          { label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() }
         ]
       }
     );

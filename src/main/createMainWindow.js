@@ -27,7 +27,7 @@ class MainWindow {
   }
 }
 
-function createMainWindow() {
+let createMainWindow = () => {
   return new MainWindow();
 }
 

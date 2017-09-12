@@ -9,7 +9,9 @@
     "electron": "electron .",
     "eslint": "eslint \"src/**/*.{js,jsx}\"",
     "lint": "npm run eslint; stylelint src/**/*.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron_build_only": "electron-packager . --overwrite",
+    "electron_build": "webpack && electron-packager . --overwrite"
   },
   "devDependencies": {
     "babel-core": "6.18.0",
