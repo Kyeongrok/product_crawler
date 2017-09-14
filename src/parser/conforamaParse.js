@@ -38,8 +38,6 @@ const parse = () => {
             resolve(result);
             //console.log("request end")
         });
-
-
     });
 }
 
