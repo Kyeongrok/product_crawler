@@ -12,18 +12,26 @@ class MainWindow {
       e.preventDefault();
       shell.openExternal(url);
     });
+
   }
 
   requestText() {
     return new Promise((resolve) => {
       console.log('message');
       this.window.webContents.send('REQUEST_TEXT');
-      ipcMain.once('REPLY_TEXT', (_e, text) => resolve(text));
+      ipcMain.once('REPLY_TEXT', (_e, text) =>{
+        console.log("replay text",text);
+        resolve(text);
+      } );
     });
   }
 
   sendText(text) {
     this.window.webContents.send('SEND_TEXT', text);
+  }
+
+  reloadWindow(){
+    this.window.webContents.reload();
   }
 }
 

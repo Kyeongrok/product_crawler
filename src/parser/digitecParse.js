@@ -22,7 +22,7 @@ const parse = () => {
 
   let baseRequestOptions = {
     method: 'GET',
-    uri: 'https://www.digitec.ch/de/s1/producttype/tv-4?tagIds=538&take=10',
+    uri: 'https://www.digitec.ch/de/s1/producttype/tv-4?tagIds=538&take=300',
     headers: {'User-Agent': 'Mozilla/5.0'},
   };
 

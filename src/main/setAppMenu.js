@@ -5,8 +5,7 @@ function setAppMenu(options) {
     {
       label: 'File',
       submenu: [
-        { label: 'digitec', click: () => options.parseDigitec() },
-        { label: 'conforma', click: () => options.parseConforma() }
+        { label: 'reload', accelerator: 'Ctrl+r', click: () => options.reloadWindow() }
       ]
     },
     {
@@ -14,7 +13,7 @@ function setAppMenu(options) {
       submenu: [
         {
           label: 'Toggle DevTools',
-          accelerator: 'Alt+Command+I',
+          accelerator: 'Alt+l',
           click: () => BrowserWindow.getFocusedWindow().toggleDevTools()
         }
       ]

@@ -4,7 +4,7 @@ import setAppMenu from './setAppMenu';
 import showOpenFileDialog from './showOpenFileDialog'
 import conformaParse from '../parser/conforamaParse';
 import digitecParse from '../parser/digitecParse';
-
+import { ipcMain } from 'electron';
 
 let mainWindow = null;
 
@@ -46,10 +46,28 @@ const printHello = () => {
 }
 
 // const digitecService = () => digitecParser.parse();
+const reloadWindow = () => mainWindow.reloadWindow();
 
 app.on('ready', () => {
+  ipcMain.on('REQUEST_EVENT', (_e, eventName) =>{
+    console.log(eventName);
+    if(eventName === "clickDigitecButton"){
+      digitecParse.parse()
+        .then(text => mainWindow.sendText(JSON.stringify(text)))
+        .catch((error) => {
+          console.log(error);
+        });
+    }else if(eventName === "clickConformaButton"){
+      conformaParse.parse()
+      .then(text => mainWindow.sendText(JSON.stringify(text)))
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  });
+
   mainWindow = createMainWindow();
-  setAppMenu({printHello, openFile, parseDigitec, parseConforma});
+  setAppMenu({printHello, openFile, parseDigitec, parseConforma, reloadWindow});
 });
 
 app.on('window-all-closed', () => {
