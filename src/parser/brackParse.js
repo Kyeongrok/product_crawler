@@ -31,56 +31,55 @@ const getTotalNumber = () => {
     });
 }
 
-const getList = () => {
-    console.log("getList");
+const subParse = (index, max) => {
     const paginationRequestOptions = {
         method: 'GET',
         uri: 'https://www.brack.ch/tv-audio-foto/tv-und-homecinema/tv/tv?page=',
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
-
+    paginationRequestOptions["uri"] += index
     return new Promise((resolve, reject) => {
-
-        getTotalNumber()
-            .then((totalNumber) => {
-                let result = {list: []};
-
-                for (var index = 0; index < totalNumber / 20; index++) {
-                    var requestOptions = paginationRequestOptions;
-                    requestOptions["uri"] = requestOptions["uri"] + index
-                    request(requestOptions, function (error, response, html) {
-                        if (error) {
-                            // throw error;
-                            reject(error);
-                        }
-                        // console.log(html);
-                        console.log('success');
-
-                        // load website
-
-                        const $ = cheerio.load(html);
-                        $('.productList__item').each(function (index, elem) {
-                            //console.log($(this).text());
-                            brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
-                            name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
-                            //console.log(name);
-                            price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
-                            const productionInfo = {list: []};
-                            productionInfo.name = brand + " " + name;
-                            productionInfo.price = price;
-                            result.list.push(productionInfo);
-
-                            // console.log(brand);
-                            // console.log(name);
-                            // console.log(price);
-                        });
-                    })
-                }
-                resolve(result);
-            })
-            .catch((error) => {
+        request(paginationRequestOptions, function (error, response, html) {
+            if (error) {
+                // throw error;
                 reject(error);
-            })
+            }
+
+            if (index >= max) {
+                console.log("reject")
+                reject(error);
+            } else {
+
+                // console.log(html);
+                console.log(index, max);
+                console.log(paginationRequestOptions);
+                // load website
+                let list = []
+                const $ = cheerio.load(html);
+                $('.productList__item').each(function (index, elem) {
+                    //console.log($(this).text());
+                    brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
+                    name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
+                    //console.log(name);
+                    price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
+
+                    const productionInfo = {list: []};
+                    if (price) {
+                        productionInfo.name = brand + " " + name;
+                        productionInfo.appendix = price;
+                        list.push(productionInfo);
+                    }
+
+                    //console.log(brand);
+                    //console.log(name);
+                    //console.log(price);
+                })
+                resolve(index);
+                
+                index += 1;
+                subParse(index, max);
+            }
+        });
     });
 }
 
@@ -88,33 +87,30 @@ const parse = () => {
     console.log('brackParser');
 
     return new Promise((resolve, reject) => {
-        //let results = {list: []};
-        getList()
-            .then((result) => {
-                resolve(result);
-            })
-            .catch((error) => {
-                reject(error);
-            })
-        /*
         getTotalNumber()
             .then((totalNumber) => {
                 console.log(totalNumber);
 
-                for (var i = 0; i < totalNumber / 20; i++) {
-                    getList((i+1), results.list)
-                        .then(result => results.push(result))
-                        .catch((error) => {
-                            reject(error);
-                        })
-                }
-                resolve(results);
+                let result = {list: []};
+                let index = 1;
+                const max = (totalNumber / 20) + 1;
+
+                subParse(index, max)
+                    .then((index) => {
+                        //console.log(list);
+                        //result.push(list);
+                    })
+                    .catch((error) => {
+                        // reject(error);
+                        console.log("error")
+                        // resolve(result);
+                    });
             })
             .catch((error) => {
                 reject(error);
             })
-            */
-    })
+
+    });
 }
 
 module.exports.parse = parse;
