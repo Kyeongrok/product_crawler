@@ -38,22 +38,22 @@ const subParser = (index) => {
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
     requestOptions["uri"] += index
-    console.log(requestOptions)
+    //console.log(requestOptions)
     return new Promise((resolve, reject) => {
         request(requestOptions, function (error, response, html) {
             if (error) {
                 // throw error;
                 reject(error);
             }
-            console.log('success');
+            // console.log('success');
 
             // load website
             const $ = cheerio.load(html);
 
-            const result = {list: []};
+            const result = []
             $('.box1.teaserSmallImageWide.productListResultItem').each(function (index, elem) {
                 //console.log($(this).text());
-                const name = $(this).children('div').children('div').children('h3').text();
+                const name = $(this).children('div').children('div').children('h3').children('a').text();
                 const price = $(this).children('div').children('div').children('div').children('span.price').text().replace(/\s/g, '');
                 const productInfo = {list: []};
                 if (price) {
@@ -61,7 +61,7 @@ const subParser = (index) => {
                     //console.log(price);
                     productInfo.name = name;
                     productInfo.price = price;
-                    result.list.push(productInfo);
+                    result.push(productInfo);
                 }
             });
             //console.log(result);
@@ -78,20 +78,23 @@ const parse = () => {
     return new Promise((resolve, reject) => {
         getTotalNumber()
             .then((totalNumber) => {
-                console.log(totalNumber);
+                //console.log(totalNumber);
 
-                let result = {list: []};
-                //let index = 1;
                 const max = (totalNumber / 50) + 1;
                 promises = [];
                 for (var index = 1; index < max; index++) {
                     promises.push(subParser(index));
                 }
-
+                let result = [];
                 Promise.all(promises)
                     .then((data) => {
-                        console.log(data.list);
-                        resolve(max);
+                        //console.log(data);
+                        //result.concat(data);
+                        for (var i = 0; i < max - 1; i++) {
+                            //console.log(data[i]);
+                            result = result.concat(data[i]);
+                        }
+                        resolve(result);
                     })
                     .catch((err) => {
                         reject(error);
