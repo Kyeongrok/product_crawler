@@ -19,7 +19,7 @@ const getTotalNumber = () => {
             // console.log('success');
 
             // load website
-            var $ = cheerio.load(html);
+            const $ = cheerio.load(html);
 
             // find total number of item
             $('.Count').each(function (index, elem) {
@@ -31,7 +31,7 @@ const getTotalNumber = () => {
     });
 }
 
-const subParse = (index, max) => {
+const subParse = (index) => {
     const requestOptions = {
         method: 'GET',
         uri: 'https://www.brack.ch/tv-audio-foto/tv-und-homecinema/tv/tv?page=',
@@ -45,50 +45,29 @@ const subParse = (index, max) => {
                 // throw error;
                 reject(error);
             }
+            // console.log(html);
+            // console.log('success');
 
-            if (index >= max) {
-                console.log("reject")
-                reject(error);
-            } else {
-                // console.log(html);
-                console.log(index, max);
-                console.log(requestOptions);
-                // load website
-                let list = []
-                const $ = cheerio.load(html);
-                $('.productList__item').each(function (index, elem) {
-                    //console.log($(this).text());
-                    brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
-                    name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
-                    //console.log(name);
-                    price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
+            // load website
+            const $ = cheerio.load(html);
 
-                    const productionInfo = {list: []};
-                    if (price) {
-                        productionInfo.name = brand + " " + name;
-                        productionInfo.appendix = price;
-                        list.push(productionInfo);
-                    }
+            const result = []
+            $('.productList__item').each(function (index, elem) {
+                //console.log($(this).text());
+                brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
+                name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
+                price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
 
-                    //console.log(brand);
-                    //console.log(name);
-                    //console.log(price);
-                })
-                resolve(index);
-
-                index += 1;
-                subParse(index, max)
-                    .then((index) => {
-                        //console.log(list);
-                        //result.push(list);
-                    })
-                    .catch((error) => {
-                        // reject(error);
-                        console.log("error")
-                        // resolve(result);
-                    });
-
-            }
+                const productionInfo = {list: []};
+                if (price) {
+                    productionInfo.name = brand + " " + name;
+                    productionInfo.appendix = price;
+                    result.push(productionInfo);
+                }
+            });
+            //console.log(result);
+            resolve(result);
+            //console.log("request end")
         });
     });
 }
@@ -101,20 +80,26 @@ const parse = () => {
             .then((totalNumber) => {
                 console.log(totalNumber);
 
-                let result = {list: []};
-                let index = 1;
                 const max = (totalNumber / 20) + 1;
-
-                subParse(index, max)
-                    .then((index) => {
-                        //console.log(list);
-                        //result.push(list);
+                promises = [];
+                for (var i = 1; i < max; i++) {
+                    promises.push(subParse(i));
+                }
+                let result = [];
+                Promise.all(promises)
+                    .then((data) => {
+                        //console.log(data);
+                        //result.concat(data);
+                        for (var i = 0; i < max - 1; i++) {
+                            //console.log(data[i]);
+                            result = result.concat(data[i]);
+                        }
+                        resolve(result);
                     })
-                    .catch((error) => {
-                        // reject(error);
-                        console.log("error")
-                        // resolve(result);
-                    });
+                    .catch((err) => {
+                        reject(error);
+                    })
+
             })
             .catch((error) => {
                 reject(error);

@@ -19,7 +19,7 @@ const getTotalNumber = () => {
             // console.log('success');
 
             // load website
-            var $ = cheerio.load(html);
+            const $ = cheerio.load(html);
 
             // find total number of item
             $('.searchTitle').each(function (index, elem) {
@@ -31,7 +31,7 @@ const getTotalNumber = () => {
     });
 }
 
-const subParser = (index) => {
+const subParse = (index) => {
     const requestOptions = {
         method: 'GET',
         uri: 'https://www.alltron.ch/ce/tv-home-cinema/tv/tv?page=',
@@ -45,6 +45,7 @@ const subParser = (index) => {
                 // throw error;
                 reject(error);
             }
+            // console.log(html);
             // console.log('success');
 
             // load website
@@ -82,8 +83,8 @@ const parse = () => {
 
                 const max = (totalNumber / 50) + 1;
                 promises = [];
-                for (var index = 1; index < max; index++) {
-                    promises.push(subParser(index));
+                for (var i = 1; i < max; i++) {
+                    promises.push(subParse(i));
                 }
                 let result = [];
                 Promise.all(promises)
