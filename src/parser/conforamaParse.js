@@ -19,7 +19,6 @@ const parse = () => {
             // load website
             const $ = cheerio.load(html);
 
-            // find total number of item
             let result = {list: []};
             $('.designProd').each(function (index, elem) {
                 //console.log($(this).text());

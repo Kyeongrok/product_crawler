@@ -2,7 +2,7 @@ const request = require('request');
 const cheerio = require('cheerio');
 
 const getTotalNumber = () => {
-    console.log('subParser');
+    console.log('getTotalNumber');
     const baseRequestOptions = {
         method: 'GET',
         uri: 'https://www.brack.ch/tv-audio-foto/tv-und-homecinema/tv/tv?',
@@ -32,14 +32,15 @@ const getTotalNumber = () => {
 }
 
 const subParse = (index, max) => {
-    const paginationRequestOptions = {
+    const requestOptions = {
         method: 'GET',
         uri: 'https://www.brack.ch/tv-audio-foto/tv-und-homecinema/tv/tv?page=',
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
-    paginationRequestOptions["uri"] += index
+    requestOptions["uri"] += index
+    //console.log(requestOptions)
     return new Promise((resolve, reject) => {
-        request(paginationRequestOptions, function (error, response, html) {
+        request(requestOptions, function (error, response, html) {
             if (error) {
                 // throw error;
                 reject(error);
@@ -49,10 +50,9 @@ const subParse = (index, max) => {
                 console.log("reject")
                 reject(error);
             } else {
-
                 // console.log(html);
                 console.log(index, max);
-                console.log(paginationRequestOptions);
+                console.log(requestOptions);
                 // load website
                 let list = []
                 const $ = cheerio.load(html);
@@ -75,9 +75,19 @@ const subParse = (index, max) => {
                     //console.log(price);
                 })
                 resolve(index);
-                
+
                 index += 1;
-                subParse(index, max);
+                subParse(index, max)
+                    .then((index) => {
+                        //console.log(list);
+                        //result.push(list);
+                    })
+                    .catch((error) => {
+                        // reject(error);
+                        console.log("error")
+                        // resolve(result);
+                    });
+
             }
         });
     });
