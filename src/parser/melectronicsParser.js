@@ -5,7 +5,7 @@ const getTotalNumber = () => {
     console.log('getTotalNumber');
     const baseRequestOptions = {
         method: 'GET',
-        uri: 'https://www.alltron.ch/ce/tv-home-cinema/tv/tv?',
+        uri: 'http://www.melectronics.ch/c/de/TV_%26_Audio/Fernseher/',
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
 
@@ -22,8 +22,8 @@ const getTotalNumber = () => {
             const $ = cheerio.load(html);
 
             // find total number of item
-            $('.searchTitle').each(function (index, elem) {
-                var totalNumber = Number($(this).children('h2').children('span').text().split('Ergebnisse')[0].replace(/\s/g, ''));
+            $('.total').first().each(function () {
+                const totalNumber = Number($(this).text())
                 // console.log(totalNumber);
                 resolve(totalNumber)
             })
@@ -34,10 +34,10 @@ const getTotalNumber = () => {
 const subParse = (index) => {
     const requestOptions = {
         method: 'GET',
-        uri: 'https://www.alltron.ch/ce/tv-home-cinema/tv/tv?page=',
+        uri: 'http://www.melectronics.ch/c/de/TV_%26_Audio/Fernseher/?fromIndex=',
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
-    requestOptions["uri"] += index
+    requestOptions['uri'] += index;
     //console.log(requestOptions)
     return new Promise((resolve, reject) => {
         request(requestOptions, function (error, response, html) {
@@ -52,19 +52,29 @@ const subParse = (index) => {
             const $ = cheerio.load(html);
 
             const result = []
-            $('.box1.teaserSmallImageWide.productListResultItem').each(function (index, elem) {
-                //console.log($(this).text());
-                const name = $(this).children('div').children('div').children('h3').children('a').text();
-                const price = $(this).children('div').children('div').children('div').children('span.price').text().replace(/\s/g, '');
-                const productInfo = {list: []};
-                if (price) {
+            $('.right-area').each(function () {
+                const name = $(this).children('div').children('h3.productname').text();
+                if (name) {
+                    const productionInfo = {list: []};
                     //console.log(name);
-                    //console.log(price);
-                    productInfo.name = name;
-                    productInfo.price = price.replace(/[^0-9]/g,"");
-                    result.push(productInfo);
+                    productionInfo.name = name.replace(/\n\s*\t/, '').replace(/\n\n\s+/, '');
+
+                    const price = $(this).children('div').children('span').children('span');
+
+
+                    if (price.children('span').text()) {
+                        const old = price.children('span.value').text()
+                        productionInfo.appendix = old;  // 기본값
+                        const current = price.text().split('Vorher')[0]
+                        productionInfo.price= current.replace(/[^0-9]/g,'') // 세일가
+                    } else {
+                        const current = price.text()
+                        productionInfo.price = current.replace(/[^0-9]/g,''); // 기본가
+                    }
+
+                    result.push(productionInfo);
                 }
-            });
+            })
             //console.log(result);
             resolve(result);
             //console.log("request end")
@@ -72,34 +82,35 @@ const subParse = (index) => {
     });
 }
 
-
 const parse = () => {
-    console.log('alltronParser');
+    console.log('melectronicsParser');
 
     return new Promise((resolve, reject) => {
         getTotalNumber()
-            .then((totalNumber) => {
-                //console.log(totalNumber);
+            .then(totalNumber => {
+                console.log(totalNumber);
 
-                const max = (totalNumber / 50) + 1;
-                promises = [];
-                for (var i = 1; i < max; i++) {
-                    promises.push(subParse(i));
+                const max = (totalNumber / 15) + 1;
+                const promises = [];
+                for (let i = 0; i < max; i++) {
+                  console.log('subPars:', i);
+                    promises.push(subParse(i * 15));
                 }
                 let result = [];
                 Promise.all(promises)
                     .then((data) => {
                         //console.log(data);
                         //result.concat(data);
-                        for (var i = 0; i < max - 1; i++) {
+                        for (let i = 0; i < max - 1; i++) {
                             //console.log(data[i]);
                             result = result.concat(data[i]);
                         }
                         resolve(result);
                     })
                     .catch((err) => {
-                        reject(error);
+                        reject(err);
                     })
+
             })
             .catch((error) => {
                 reject(error);

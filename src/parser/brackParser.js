@@ -6,27 +6,29 @@ const getTotalNumber = () => {
     const baseRequestOptions = {
         method: 'GET',
         uri: 'https://www.brack.ch/tv-audio-foto/tv-und-homecinema/tv/tv?',
-        headers: {'User-Agent': 'Mozilla/5.0'},
+        headers: {
+          headers: {'User-Agent': 'Mozilla/5.0'},
+        },
     };
-
+  console.log('request:', 'getTotalNumber');
     return new Promise((resolve, reject) => {
         request(baseRequestOptions, function (error, response, html) {
-            if (error) {
-                // throw error;
-                reject(error);
-            }
-            // console.log(html);
-            // console.log('success');
+          if (error) {
+              // throw error;
+              reject(error);
+          }
+          // console.log(html);
+          console.log('success');
 
-            // load website
-            const $ = cheerio.load(html);
+          // load website
+          const $ = cheerio.load(html);
 
-            // find total number of item
-            $('.Count').each(function (index, elem) {
-                let totalNumber = Number($(this).text().split('Treffer')[0].replace(/\s/g, ''));
-                // console.log(totalNumber);
-                resolve(totalNumber)
-            })
+          // find total number of item
+          $('.Count').each(function () {
+              let totalNumber = Number($(this).text().split('Treffer')[0].replace(/\s/g, ''));
+              // console.log(totalNumber);
+              resolve(totalNumber)
+          })
         });
     });
 }
@@ -51,16 +53,16 @@ const subItemParse = (href) => {
             const $ = cheerio.load(html);
 
             const productionInfo = {list: []};
-            $('.productStage__infoColumn').each(function (index, elem) {
-                brand = $(this).children('div').children('span.productStage__itemManufacturer').text();
-                name = $(this).children('div').children('h1').text();
-                label = $(this).children('div').children('div').children('div').children('p').children('span.productStage__variants__label').text();
-                price = $(this).children('div').children('div').children('p').children('span.price').children('em').text();
+            $('.productStage__infoColumn').each(function () {
+                const brand = $(this).children('div').children('span.productStage__itemManufacturer').text();
+                const name = $(this).children('div').children('h1').text();
+                const label = $(this).children('div').children('div').children('div').children('p').children('span.productStage__variants__label').text();
+                const price = $(this).children('div').children('div').children('p').children('span.price').children('em').text();
                 //console.log(brand + " " + name);
                 //console.log(label);
                 //console.log(price);
-                productionInfo.name = brand + " " + name;
-                productionInfo.appendix = price.replace(/[^0-9]/g,"");
+                productionInfo.name = brand + ' ' + name;
+                productionInfo.appendix = price.replace(/[^0-9]/g,'');
                 productionInfo.inch = label;
             });
             //console.log(productionInfo);
@@ -91,30 +93,28 @@ const subParse = (index) => {
             const $ = cheerio.load(html);
 
             const result = []
-            $('.productList__item').each(function (index, elem) {
+            $('.productList__item').each(function () {
                 // console.log($(this).text());
-                brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
-                name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
-                price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
-                productionList = $(this).children('div').children('a').children('div.productList__itemVariant');
+                const brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
+                const name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
+                const price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
 
-                itemLength = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li').length;
-                item = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li');
+                const itemLength = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li').length;
+                const item = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li');
 
                 if (itemLength == 0) { // 한개인 경우
                     if (price) {
                         const productionInfo = {list: []};
-                        productionInfo.name = brand + " " + name;
-                        productionInfo.appendix = price.replace(/[^0-9]/g,"");
+                        productionInfo.name = brand + ' ' + name;
+                        productionInfo.appendix = price.replace(/[^0-9]/g,'');
                         //console.log(productionInfo);
                         result.push(productionInfo);
                     }
                 } else {
-                    hrefs = [];
-                    var num = 0;
+                    let num = 0;
                     item.each(function (index, elem) {
                         // console.log( $(elem).attr('data-href') );
-                        href = $(elem).attr('data-href');
+                        const href = $(elem).attr('data-href');
                         //promises.push(subItemParse(href));
                         result.push(href);
                         num += 1;
@@ -153,7 +153,7 @@ const parse = () => {
                 console.log(totalNumber);
 
                 const max = (totalNumber / 20) + 1;
-                promises = [];
+                const promises = [];
                 for (let i = 1; i < max; i++) {
                     promises.push(subParse(i));
                 }
@@ -181,11 +181,11 @@ const parse = () => {
 
     }).then(data => {
         //console.log(data);
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             const result = []
 
-            promises = [];
-            itemNum = 0;
+            const promises = [];
+            let itemNum = 0;
             for (let i = 0; i < data.length; i++) {
                 if (typeof data[i] == 'string') {
                     promises.push(subItemParse(data[i]));

@@ -16,7 +16,7 @@ class App extends Component {
 
   componentDidMount() {
     ipcRenderer.on('REQUEST_TEXT', () => {
-      console.log("request text");
+      console.log('request text');
       ipcRenderer.send('REPLY_TEXT', this.state.name);
     });
     ipcRenderer.on('SEND_TEXT', (_e, text) => {
@@ -31,16 +31,12 @@ class App extends Component {
   componentWillUnmount() {
     ipcRenderer.removeAllListeners();
   }
-  handleClickDigitecButton() {
-    console.log('click Button');
-    this.setState({status: 'request', site:'Digitec', list:[]});
-    ipcRenderer.send('REQUEST_EVENT', 'clickDigitecButton');
-  }
 
-  handleClickConformaButton() {
-    console.log('click Conforma Button');
-    this.setState({status: 'request', site:'Conforma', list:[]});
-    ipcRenderer.send('REQUEST_EVENT', 'clickConformaButton');
+  handleClickSiteButton(event){
+    console.log(event.target.name);
+    const targetSite = event.target.name;
+    this.setState({status: 'request', site:targetSite, list:[]});
+    ipcRenderer.send('REQUEST_EVENT', targetSite);
   }
 
   render() {
@@ -53,8 +49,9 @@ class App extends Component {
                 <Col xs={3} md={3}>
                   <h4><Label>개수:{this.state.list.length}</Label></h4>
                 </Col>
-                <Col xs={3} md={3}><Button bsStyle="primary" onClick={(event) => this.handleClickDigitecButton(event)}>Digitec</Button></Col>
-                <Col xs={3} md={3}><Button bsStyle="primary" onClick={(event) => this.handleClickConformaButton(event)}>Conforma</Button></Col>
+                <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Digitec" onClick={(event) => this.handleClickSiteButton(event)}>Digitec</Button></Col>
+                <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Conforma" onClick={(event) => this.handleClickSiteButton(event)}>Conforma</Button></Col>
+
               </Row>
             </Panel>
 

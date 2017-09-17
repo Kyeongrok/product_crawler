@@ -27,6 +27,7 @@ const parse = () => {
   };
 
   return new Promise((resolve) => {
+    console.log('request to digitec');
     request(baseRequestOptions, function (error, response, html) {
       if (error) {
         throw error;

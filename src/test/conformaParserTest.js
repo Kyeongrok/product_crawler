@@ -1,4 +1,4 @@
-const conformaParser = require('../parser/conforamaParse');
+const conformaParser = require('../parser/conforamaParser');
 
 conformaParser.parse()
   .then(text => console.log(text))

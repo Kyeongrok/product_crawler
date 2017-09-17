@@ -1,47 +1,25 @@
 import {app} from 'electron';
 import createMainWindow from './createMainWindow';
 import setAppMenu from './setAppMenu';
-import showOpenFileDialog from './showOpenFileDialog'
-import conformaParse from '../parser/conforamaParse';
+import conformaParse from '../parser/conforamaParser';
 import digitecParse from '../parser/digitecParse';
-import { ipcMain } from 'electron';
+import altronParser from '../parser/altronParser';
+import melectronicsParser from '../parser/melectronicsParser';
+import brackParser from '../parser/brackParser';
+import {ipcMain} from 'electron';
 
 let mainWindow = null;
 
-const parseDigitec = () => {
-  console.log('entered into parseDigitec');
-  digitecParse.parse()
-    .then(text => mainWindow.sendText(JSON.stringify(text)))
-    .catch((error) => {
-      console.log(error);
-    });
-  console.log('finish');
-}
-
-const parseConforma = () => {
-  console.log('entered into parseConforma');
-  conformaParse.parse()
-    .then(text => {
-      const jsonString = JSON.stringify(text);
-      console.log(jsonString);
-      mainWindow.sendText(jsonString);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-const openFile = () => {
-  showOpenFileDialog()
-    .then(text => mainWindow.sendText(text))
-    .catch((error) => {
-      console.log(error);
-    });
-}
+const parserMap = {
+  'Digitec': digitecParse,
+  'Conforma': conformaParse,
+  'Atron': altronParser,
+  'Brack': brackParser,
+  'Melectronics': melectronicsParser
+};
 
 const printHello = () => {
   let hello = {'hello': 'kyeongrok'};
-
   mainWindow.sendText(JSON.stringify(hello));
 }
 
@@ -49,25 +27,19 @@ const printHello = () => {
 const reloadWindow = () => mainWindow.reloadWindow();
 
 app.on('ready', () => {
-  ipcMain.on('REQUEST_EVENT', (_e, eventName) =>{
-    console.log(eventName);
-    if(eventName === "clickDigitecButton"){
-      digitecParse.parse()
-        .then(text => mainWindow.sendText(JSON.stringify(text)))
-        .catch((error) => {
-          console.log(error);
-        });
-    }else if(eventName === "clickConformaButton"){
-      conformaParse.parse()
+  ipcMain.on('REQUEST_EVENT', (_e, eventName) => {
+    console.log('app.on', eventName);
+    console.log(parserMap[eventName]);
+    const parser = parserMap[eventName];
+    parser.parse()
       .then(text => mainWindow.sendText(JSON.stringify(text)))
       .catch((error) => {
         console.log(error);
       });
-    }
   });
 
   mainWindow = createMainWindow();
-  setAppMenu({printHello, openFile, parseDigitec, parseConforma, reloadWindow});
+  setAppMenu({printHello, reloadWindow});
 });
 
 app.on('window-all-closed', () => {

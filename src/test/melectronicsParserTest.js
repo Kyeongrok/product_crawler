@@ -1,4 +1,4 @@
-const melectronicsParser = require('../parser/melectronicsParse');
+const melectronicsParser = require('../parser/melectronicsParser');
 
 melectronicsParser.parse()
     .then(text => console.log(text))

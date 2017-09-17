@@ -2,13 +2,14 @@ const request = require('request');
 const cheerio = require('cheerio');
 
 const parse = () => {
-    console.log('conformaParser');
-    const baseRequestOptions = {
-        method: 'GET',
-        uri: 'http://www.conforama.ch/rayon3_high-tech_tv--video---home-cinema_televisions-led_10051_10601_-16_42073_42119_42110',
-        headers: {'User-Agent': 'Mozilla/5.0'},
-    };
+  console.log('conformaParser');
+  const baseRequestOptions = {
+    method: 'GET',
+    uri: 'http://www.conforama.ch/rayon3_high-tech_tv--video---home-cinema_televisions-led_10051_10601_-16_42073_42119_42110',
+    headers: {'User-Agent': 'Mozilla/5.0'},
+  };
 
+  console.log('request to conforma');
     return new Promise((resolve) => {
         request(baseRequestOptions, function (error, response, html) {
             if (error) {
@@ -29,8 +30,8 @@ const parse = () => {
                 const productInfo = {list: []};
                 if (price) {
                     productInfo.name = name;
-                    productInfo.appendix = price.replace(/[^0-9]/g,""); // 세일가
-                    productInfo.price = old.replace(/[^0-9]/g,"");  // 기본가
+                    productInfo.appendix = price.replace(/[^0-9]/g,''); // 세일가
+                    productInfo.price = old.replace(/[^0-9]/g,'');  // 기본가
                     result.list.push(productInfo);
                 }
             });

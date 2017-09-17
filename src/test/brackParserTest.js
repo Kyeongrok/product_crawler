@@ -1,4 +1,4 @@
-const brackParser = require('../parser/brackParse');
+const brackParser = require('../parser/brackParser');
 
 brackParser.parse()
     .then(text => {

@@ -35,10 +35,13 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "cheerio-httpcli": "^0.7.1",
+    "crawler": "^1.0.5",
     "electron": "^1.7.6",
+    "express": "^4.15.4",
     "marked": "^0.3.6",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.3",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "request": "^2.81.0"
   }
 }
