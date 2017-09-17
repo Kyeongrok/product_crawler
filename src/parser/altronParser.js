@@ -103,14 +103,14 @@ const parse = () => {
                   console.log('subParse:', i)
                   promises.push(subParse(i));
                 }
-                let result = [];
+                const result = { status: 'ok', list: [] };
                 Promise.all(promises)
                     .then((data) => {
                         //console.log(data);
                         //result.concat(data);
                         for (let i = 0; i < max - 1; i++) {
                             //console.log(data[i]);
-                            result = result.concat(data[i]);
+                            result.list = result.list.concat(data[i]);
                         }
                         resolve(result);
                     })
