@@ -55,12 +55,11 @@ const subParse = (index) => {
             $('.right-area').each(function () {
                 const name = $(this).children('div').children('h3.productname').text();
                 if (name) {
-                    const productionInfo = {list: []};
+                    const productionInfo = {};
                     //console.log(name);
                     productionInfo.name = name.replace(/\n\s*\t/, '').replace(/\n\n\s+/, '');
 
                     const price = $(this).children('div').children('span').children('span');
-
 
                     if (price.children('span').text()) {
                         const old = price.children('span.value').text()
@@ -96,14 +95,14 @@ const parse = () => {
                   console.log('subPars:', i);
                     promises.push(subParse(i * 15));
                 }
-                let result = [];
+                const result = { status: 'ok', list: [] };
                 Promise.all(promises)
                     .then((data) => {
                         //console.log(data);
                         //result.concat(data);
                         for (let i = 0; i < max - 1; i++) {
                             //console.log(data[i]);
-                            result = result.concat(data[i]);
+                            result.list = result.list.concat(data[i]);
                         }
                         resolve(result);
                     })

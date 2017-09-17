@@ -52,7 +52,7 @@ const subItemParse = (href) => {
             // load website
             const $ = cheerio.load(html);
 
-            const productionInfo = {list: []};
+            const productionInfo = {};
             $('.productStage__infoColumn').each(function () {
                 const brand = $(this).children('div').children('span.productStage__itemManufacturer').text();
                 const name = $(this).children('div').children('h1').text();
@@ -182,7 +182,7 @@ const parse = () => {
     }).then(data => {
         //console.log(data);
         return new Promise(resolve => {
-            const result = []
+            const result = { status: 'ok', list: [] };
 
             const promises = [];
             let itemNum = 0;
@@ -191,7 +191,7 @@ const parse = () => {
                     promises.push(subItemParse(data[i]));
                     itemNum += 1;
                 } else {
-                    result.push(data[i]);
+                    result.list.push(data[i]);
                 }
             }
             console.log(itemNum);
@@ -199,7 +199,7 @@ const parse = () => {
                 .then((data) => {
                     for (let i = 0; i < itemNum; i++) {
                         // console.log(data[i]);
-                        result.push(data[i]);
+                        result.list.push(data[i]);
                     }
                     resolve(result);
                 })
