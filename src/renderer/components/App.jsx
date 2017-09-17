@@ -51,6 +51,7 @@ class App extends Component {
                 </Col>
                 <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Digitec" onClick={(event) => this.handleClickSiteButton(event)}>Digitec</Button></Col>
                 <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Conforma" onClick={(event) => this.handleClickSiteButton(event)}>Conforma</Button></Col>
+                <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Altron" onClick={(event) => this.handleClickSiteButton(event)}>Altron</Button></Col>
 
               </Row>
             </Panel>

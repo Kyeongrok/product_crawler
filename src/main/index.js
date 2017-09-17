@@ -13,7 +13,7 @@ let mainWindow = null;
 const parserMap = {
   'Digitec': digitecParse,
   'Conforma': conformaParse,
-  'Atron': altronParser,
+  'Altron': altronParser,
   'Brack': brackParser,
   'Melectronics': melectronicsParser
 };
