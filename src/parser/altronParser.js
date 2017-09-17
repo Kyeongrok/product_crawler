@@ -13,28 +13,33 @@ const getTotalNumber = () => {
     };
 
     console.log('request:','getTotalNumber');
-    return new Promise((resolve, reject) => {
-        request(baseRequestOptions, function (error, response, html) {
+
+      return new Promise((resolve, reject) => {
+          request(baseRequestOptions,  (error, response, html) => {
             if (error) reject(error);
             // console.log(html);:
             console.log('success');
 
             // load website
-          let $ = null;
-          try {
-            $ = cheerio.load(html);
-          } catch (e) {
-            console.log(e)
-          }
+            let $ = null;
+            try {
+              $ = cheerio.load(html);
+            } catch (e) {
+              console.log(e)
+            }
 
             // find total number of item
             $('.searchTitle').each(function () {
-                const totalNumber = Number($(this).children('h2').children('span').text().split('Ergebnisse')[0].replace(/\s/g, ''));
-                console.log(totalNumber);
-                resolve(totalNumber)
-            })
-        });
-    });
+              const totalNumber = Number($(this).children('h2').children('span').text().split('Ergebnisse')[0].replace(/\s/g, ''));
+              console.log(totalNumber);
+              resolve(totalNumber)
+            });
+          });
+          console.log("finish");
+
+      });
+
+
 }
 
 const subParse = (index) => {
@@ -63,7 +68,7 @@ const subParse = (index) => {
       const $ = cheerio.load(html);
 
 
-      const result = { status: 'ok', list: [] };
+      const result = [];
       $('.box1.teaserSmallImageWide.productListResultItem').each(function () {
           //console.log($(this).text());
           const name = $(this).children('div').children('div').children('h3').children('a').text();
@@ -73,7 +78,9 @@ const subParse = (index) => {
               //console.log(price);
               productInfo.name = name;
               productInfo.price = price.replace(/[^0-9]/g,'');
-              result.list.push(productInfo);
+              productInfo.currency = '';
+              productInfo.appendix = '';
+              result.push(productInfo);
           }
       });
       //console.log(result);

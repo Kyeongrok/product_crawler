@@ -49,9 +49,12 @@ class App extends Component {
                 <Col xs={3} md={3}>
                   <h4><Label>개수:{this.state.list.length}</Label></h4>
                 </Col>
-                <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Digitec" onClick={(event) => this.handleClickSiteButton(event)}>Digitec</Button></Col>
-                <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Conforma" onClick={(event) => this.handleClickSiteButton(event)}>Conforma</Button></Col>
-                <Col xs={3} md={3}><Button bsStyle="primary" bsSize="small" name="Altron" onClick={(event) => this.handleClickSiteButton(event)}>Altron</Button></Col>
+                <Col xs={2} md={2}><Button bsStyle="primary" bsSize="small" name="Digitec" onClick={(event) => this.handleClickSiteButton(event)}>Digitec</Button></Col>
+                <Col xs={2} md={2}><Button bsStyle="primary" bsSize="small" name="Conforma" onClick={(event) => this.handleClickSiteButton(event)}>Conforma</Button></Col>
+                <Col xs={2} md={2}><Button bsStyle="primary" bsSize="small" name="Altron" onClick={(event) => this.handleClickSiteButton(event)}>Altron</Button></Col>
+                <Col xs={2} md={2}><Button bsStyle="primary" bsSize="small" name="Brack" onClick={(event) => this.handleClickSiteButton(event)}>Brack</Button></Col>
+                <Col xs={2} md={2}><Button bsStyle="primary" bsSize="small" name="Brack" onClick={(event) => this.handleClickSiteButton(event)}>Brack</Button></Col>
+                <Col xs={2} md={2}><Button bsStyle="primary" bsSize="small" name="Melectronics" onClick={(event) => this.handleClickSiteButton(event)}>Melectronics</Button></Col>
 
               </Row>
             </Panel>
