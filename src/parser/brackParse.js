@@ -23,7 +23,7 @@ const getTotalNumber = () => {
 
             // find total number of item
             $('.Count').each(function (index, elem) {
-                var totalNumber = Number($(this).text().split('Treffer')[0].replace(/\s/g, ''));
+                let totalNumber = Number($(this).text().split('Treffer')[0].replace(/\s/g, ''));
                 // console.log(totalNumber);
                 resolve(totalNumber)
             })
@@ -38,14 +38,14 @@ const subItemParse = (href) => {
         uri: 'https://www.brack.ch',
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
-    requestOptions["uri"] += href;
+    requestOptions['uri'] += href;
     return new Promise((resolve, reject) => {
         request(requestOptions, function (error, response, html) {
             if (error) {
                 // throw error;
                 reject(error);
             }
-            // console.log(requestOptions["uri"]);
+            //console.log(requestOptions["uri"]);
 
             // load website
             const $ = cheerio.load(html);
@@ -63,11 +63,11 @@ const subItemParse = (href) => {
                 productionInfo.appendix = price;
                 productionInfo.inch = label;
             });
+            //console.log(productionInfo);
             resolve(productionInfo);
         });
     });
 }
-
 
 const subParse = (index) => {
     // console.log("subParse");
@@ -76,7 +76,7 @@ const subParse = (index) => {
         uri: 'https://www.brack.ch/tv-audio-foto/tv-und-homecinema/tv/tv?page=',
         headers: {'User-Agent': 'Mozilla/5.0'},
     };
-    requestOptions["uri"] += index;
+    requestOptions['uri'] += index;
     //console.log(requestOptions)
     return new Promise((resolve, reject) => {
         request(requestOptions, function (error, response, html) {
@@ -101,50 +101,39 @@ const subParse = (index) => {
                 itemLength = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li').length;
                 item = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li');
 
-
                 if (itemLength == 0) { // 한개인 경우
                     if (price) {
                         const productionInfo = {list: []};
                         productionInfo.name = brand + " " + name;
                         productionInfo.appendix = price;
+                        //console.log(productionInfo);
                         result.push(productionInfo);
                     }
-
                 } else {
-                    /*
-                    item.each(function (index, elem) {
-                        // console.log( $(elem).attr('data-href') );
-                        href = $(elem).attr('data-href');
-                        subItemParse(href)
-                            .then((data) => {
-                                result.push(data);
-                            })
-                            .catch((err) => {
-                                reject(error);
-                            })
-                    });
-                    */
-
-                    promises = [];
+                    hrefs = [];
                     var num = 0;
                     item.each(function (index, elem) {
                         // console.log( $(elem).attr('data-href') );
                         href = $(elem).attr('data-href');
-                        promises.push(subItemParse(href));
+                        //promises.push(subItemParse(href));
+                        result.push(href);
                         num += 1;
                     });
+                    //console.log(num);
+                    /*
                     Promise.all(promises)
                         .then((data) => {
                             // console.log(data);
                             for (var i = 0; i < num; i++) {
-                                // console.log(data[i]);
+                                //console.log(data[i]);
                                 result.push(data[i]);
                             }
+                            //resolve(result);
                         })
-                        .catch((err) => {
+                        .catch((error) => {
                             reject(error);
                         })
-
+                    */
                 }
 
             });
@@ -165,7 +154,7 @@ const parse = () => {
 
                 const max = (totalNumber / 20) + 1;
                 promises = [];
-                for (var i = 1; i < max; i++) {
+                for (let i = 1; i < max; i++) {
                     promises.push(subParse(i));
                 }
                 let result = [];
@@ -174,17 +163,14 @@ const parse = () => {
                         //console.log(data);
                         //result.concat(data);
 
-                        /*
-                                                for (var i = 0; i < max - 1; i++) {
-                                                    //console.log(data[i]);
-                                                    result = result.concat(data[i]);
-                                                }
-                                                resolve(result);
-                        */
-                        resolve(data[1]);
+                        for (let i = 0; i < max - 1; i++) {
+                            //console.log(data[i]);
+                            result = result.concat(data[i]);
+                        }
+                        resolve(result);
 
                     })
-                    .catch((err) => {
+                    .catch((error) => {
                         reject(error);
                     })
 
@@ -193,6 +179,31 @@ const parse = () => {
                 reject(error);
             })
 
+    }).then(data => {
+        //console.log(data);
+        return new Promise((resolve, reject) => {
+            const result = []
+
+            promises = [];
+            itemNum = 0;
+            for (let i = 0; i < data.length; i++) {
+                if (typeof data[i] == 'string') {
+                    promises.push(subItemParse(data[i]));
+                    itemNum += 1;
+                } else {
+                    result.push(data[i]);
+                }
+            }
+            console.log(itemNum);
+            Promise.all(promises)
+                .then((data) => {
+                    for (let i = 0; i < itemNum; i++) {
+                        // console.log(data[i]);
+                        result.push(data[i]);
+                    }
+                    resolve(result);
+                })
+        });
     });
 }
 
