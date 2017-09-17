@@ -29,8 +29,8 @@ const parse = () => {
                 const productInfo = {list: []};
                 if (price) {
                     productInfo.name = name;
-                    productInfo.appendix = price; // 세일가
-                    productInfo.price = old;  // 기본가
+                    productInfo.appendix = price.replace(/[^0-9]/g,""); // 세일가
+                    productInfo.price = old.replace(/[^0-9]/g,"");  // 기본가
                     result.list.push(productInfo);
                 }
             });

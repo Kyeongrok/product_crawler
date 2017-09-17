@@ -60,7 +60,7 @@ const subItemParse = (href) => {
                 //console.log(label);
                 //console.log(price);
                 productionInfo.name = brand + " " + name;
-                productionInfo.appendix = price;
+                productionInfo.appendix = price.replace(/[^0-9]/g,"");
                 productionInfo.inch = label;
             });
             //console.log(productionInfo);
@@ -105,7 +105,7 @@ const subParse = (index) => {
                     if (price) {
                         const productionInfo = {list: []};
                         productionInfo.name = brand + " " + name;
-                        productionInfo.appendix = price;
+                        productionInfo.appendix = price.replace(/[^0-9]/g,"");
                         //console.log(productionInfo);
                         result.push(productionInfo);
                     }

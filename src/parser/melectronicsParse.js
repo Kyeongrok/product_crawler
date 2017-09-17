@@ -53,26 +53,27 @@ const subParse = (index) => {
 
             const result = []
             $('.right-area').each(function (index, elem) {
-                // TODO: 공백처리
-                name = $(this).children('div').children('h3.productname').text();
 
-                const productionInfo = {list: []};
+                name = $(this).children('div').children('h3.productname').text();
                 if (name) {
+                    const productionInfo = {list: []};
                     //console.log(name);
-                    productionInfo.name = name;
+                    productionInfo.name = name.replace(/\n\s*\t/, "").replace(/\n\n\s+/, "");
+
                     price = $(this).children('div').children('span').children('span');
 
                     if (price.children('span').text()) {
                         old = price.children('span.value').text()
-                        productionInfo.appendix = old  // 기본값
+                        productionInfo.appendix = old;  // 기본값
                         current = price.text().split('Vorher')[0]
-                        productionInfo.price= current // 세일가
+                        productionInfo.price= current.replace(/[^0-9]/g,"") // 세일가
                     } else {
                         current = price.text()
-                        productionInfo.price = current // 기본가
+                        productionInfo.price = current.replace(/[^0-9]/g,""); // 기본가
                     }
+
+                    result.push(productionInfo);
                 }
-                result.push(productionInfo);
             })
             //console.log(result);
             resolve(result);
