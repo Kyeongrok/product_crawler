@@ -2,7 +2,7 @@ import {app} from 'electron';
 import createMainWindow from './createMainWindow';
 import setAppMenu from './setAppMenu';
 import conformaParse from '../parser/conforamaParser';
-import digitecParse from '../parser/digitecParse';
+import digitecParser from '../parser/digitecParser';
 import altronParser from '../parser/altronParser';
 import melectronicsParser from '../parser/melectronicsParser';
 import brackParser from '../parser/brackParser';
@@ -11,7 +11,7 @@ import {ipcMain} from 'electron';
 let mainWindow = null;
 
 const parserMap = {
-  'Digitec': digitecParse,
+  'Digitec': digitecParser,
   'Conforma': conformaParse,
   'Altron': altronParser,
   'Brack': brackParser,
@@ -23,7 +23,7 @@ const printHello = () => {
   mainWindow.sendText(JSON.stringify(hello));
 }
 
-// const digitecService = () => digitecParser.parse();
+
 const reloadWindow = () => mainWindow.reloadWindow();
 
 app.on('ready', () => {

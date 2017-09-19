@@ -28,16 +28,17 @@ const parse = () => {
 
   return new Promise((resolve) => {
     console.log('request to digitec');
-    request(baseRequestOptions, function (error, response, html) {
+    request(baseRequestOptions, (error, response, html) => {
       if (error) {
         throw error;
       }
-
       console.log('request success');
-
       console.log(html);
 
+      //jquery object로 변경
       let $ = cheerio.load(html);
+
+      //jquery object에서 필요한 부분 list 추출
       const productContent = $('.product-content');
       const result = { status: 'ok', list: [] };
       for (let i = 0; i < productContent.length; i += 1) {
