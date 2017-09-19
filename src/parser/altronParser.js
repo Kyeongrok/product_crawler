@@ -72,7 +72,7 @@ const subParse = (index) => {
       $('.box1.teaserSmallImageWide.productListResultItem').each(function () {
           //console.log($(this).text());
           const name = $(this).children('div').children('div').children('h3').children('a').text();
-          const price = $(this).children('div').children('div').children('div').children('span.price').text().replace(/\s/g, '');
+          const price = $(this).children('div').children('div').children('div').children('span.price').text().replace(/\s/g, '').split('.')[0].replace(/[^0-9]/g, '');
           const productInfo = {};
           if (price) {
               //console.log(price);
