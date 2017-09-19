@@ -93,48 +93,24 @@ const subParse = (index) => {
             const $ = cheerio.load(html);
 
             const result = []
-            $('.productList__item').each(function () {
+            $('.product.js-watchlist').each(function () {
                 // console.log($(this).text());
-                const brand = $(this).children('div').children('a').children('span.productList__itemManufacturer').text();
-                const name = $(this).children('div').children('a').children('span.productList__itemTitle').text();
-                const price = $(this).children('div').children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
+                const brand = $(this).children('a').children('span.productList__itemManufacturer').text();
+                const name = $(this).children('a').children('span.productList__itemTitle').text();
+                const price = $(this).children('a').children('div').children('div').children('em').text().replace(/\s/g, '');
+                const inch = $(this).children('a').children('div').children('ul').children('li.productStage__variantItem.active').text().replace(/\s/g, '');
+                const itemLength = $(this).children('a').children('div.productList__itemVariant').children('ul').find('li').length;
+                const item = $(this).children('a').children('div.productList__itemVariant').children('ul').find('li');
 
-                const itemLength = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li').length;
-                const item = $(this).children('div').children('a').children('div.productList__itemVariant').children('ul').find('li');
-
-                if (itemLength == 0) { // 한개인 경우
-                    if (price) {
-                        const productionInfo = {list: []};
-                        productionInfo.name = brand + ' ' + name;
-                        productionInfo.appendix = price.replace(/[^0-9]/g,'');
-                        //console.log(productionInfo);
-                        result.push(productionInfo);
-                    }
-                } else {
-                    let num = 0;
-                    item.each(function (index, elem) {
-                        // console.log( $(elem).attr('data-href') );
-                        const href = $(elem).attr('data-href');
-                        //promises.push(subItemParse(href));
-                        result.push(href);
-                        num += 1;
-                    });
-                    //console.log(num);
-                    /*
-                    Promise.all(promises)
-                        .then((data) => {
-                            // console.log(data);
-                            for (var i = 0; i < num; i++) {
-                                //console.log(data[i]);
-                                result.push(data[i]);
-                            }
-                            //resolve(result);
-                        })
-                        .catch((error) => {
-                            reject(error);
-                        })
-                    */
+                if (price) {
+                    const productionInfo = {};
+                    productionInfo.name = brand + ' ' + name;
+                    productionInfo.appendix = price.split('.')[0].replace(/[^0-9]/g, '');
+                    productionInfo.inch = inch;
+                    //console.log(productionInfo);
+                    result.push(productionInfo);
                 }
+
 
             });
             //console.log(result);
@@ -180,7 +156,7 @@ const parse = () => {
             })
 
     }).then(data => {
-        //console.log(data);
+        console.log(data);
         return new Promise(resolve => {
             const result = { status: 'ok', list: [] };
 
