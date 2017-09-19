@@ -25,13 +25,19 @@ const parse = () => {
                 //console.log($(this).text());
                 const name = $(this).children('a').children('span').text().replace(/\s/g, '');
                 // console.log(name);
-                const old = $(this).children('span.priceStrike').text();
-                const price = $(this).children('span.price').text();
-                const productInfo = {list: []};
-                if (price) {
+                const old = $(this).children('span.priceStrike').text(); // 가격
+                const price = $(this).children('span.price').text();    // 세일가
+
+                if (old) {
+                    const productInfo = {};
                     productInfo.name = name;
                     productInfo.appendix = price.replace(/[^0-9]/g,''); // 세일가
                     productInfo.price = old.replace(/[^0-9]/g,'');  // 기본가
+                    result.list.push(productInfo);
+                } else if (price) {
+                    const productInfo = {};
+                    productInfo.name = name;
+                    productInfo.price = price.replace(/[^0-9]/g,'');  // 세일가
                     result.list.push(productInfo);
                 }
             });

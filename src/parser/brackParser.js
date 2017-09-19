@@ -105,7 +105,7 @@ const subParse = (index) => {
                 if (price) {
                     const productionInfo = {};
                     productionInfo.name = brand + ' ' + name;
-                    productionInfo.appendix = price.split('.')[0].replace(/[^0-9]/g, '');
+                    productionInfo.price = price.split('.')[0].replace(/[^0-9]/g, '');
                     productionInfo.inch = inch;
                     //console.log(productionInfo);
                     result.push(productionInfo);
