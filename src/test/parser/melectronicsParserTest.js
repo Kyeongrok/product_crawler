@@ -1,6 +1,6 @@
-const altronParser = require('../parser/altronParser');
+const melectronicsParser = require('../../parser/melectronicsParser');
 
-altronParser.parse()
+melectronicsParser.parse()
     .then(text => console.log(text))
     .catch((error) => {
         console.log(error);
