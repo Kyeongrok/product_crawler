@@ -1,4 +1,4 @@
-const altronParser = require('../parser/altronParser');
+const altronParser = require('../../parser/altronParser');
 
 altronParser.parse()
     .then(text => console.log(text))

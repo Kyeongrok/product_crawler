@@ -1,8 +1,7 @@
-const digitecParse = require('../parser/digitecParse');
+const conformaParser = require('../../parser/conforamaParser');
 
-digitecParse.parse()
+conformaParser.parse()
   .then(text => console.log(text))
   .catch((error) => {
     console.log(error);
   });
-

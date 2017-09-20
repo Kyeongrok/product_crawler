@@ -47,11 +47,6 @@ class App extends Component {
             <Panel>
               <Row>
                 <Col xs={12} md={12}>
-                걸리는 시간 - digtec:10초, Conforma:3분, Altron:5분, Brack:5분, Melectronics:6분
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={12}>
                   에러메세지 발생시 ctrl+R 로 새로고침 후 다시 시도 해주세요.
                 </Col>
               </Row>
