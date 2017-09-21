@@ -1,51 +1,72 @@
 const request = require('request');
 const cheerio = require('cheerio');
 
-const stringGetter = (resolve) =>{
-  const baseRequestOptions = {
-    method: 'GET',
-    uri: 'http://www.conforama.ch/webapp/wcs/stores/servlet/ProductListDisplayCmd?storeId=10051&langId=-16&catalogId=10601&colType=2&loadFromPrediggoCategoryPage=true&action=1&universeId=42073&segmentId=42119&marketId=42110&refiningId=page%3d1%26nbResultsPerPage%3d10000%26sorting%3dMY_SELECTION%26constraints%3dmarche-segment%3aTV%2c+Vid%C3%A9o+%26+home+cin%C3%A9ma+%2f+T%C3%A9l%C3%A9visions+LED_%2f_segment%3aT%C3%A9l%C3%A9visions+OLED_%2f_segment%3aT%C3%A9l%C3%A9visions+QLED_%2f_segment%3aT%C3%A9l%C3%A9visions+LED',
-    headers: {'User-Agent': 'Mozilla/5.0'},
-  };
-  console.log('request to conforma');
-  request(baseRequestOptions, function (error, response, html) {
-    if (error) throw error;
-    console.log('success');
-    resolve(html) ;
-  });
-}
+const parser = (url) => {
+    const baseRequestOptions = {
+        method: 'GET',
+        url: url,
+        headers: {'User-Agent': 'Mozilla/5.0'},
+    };
+    console.log('request to conforma');
 
-const parser = (htmlString) => {
-  const $ = cheerio.load(htmlString);
-  let result = {list: []};
-  console.log($('.designProd').length);
+    return new Promise((resolve, reject) => {
+        request(baseRequestOptions, function (error, response, html) {
+            if (error) {
+                reject(error);
+            }
+            const $ = cheerio.load(html);
 
-  $('.designProd').each((index, elem) => {
-    const name = $(elem).children('a').children('span').text().replace(/\s/g, '');
-    const old = $(elem).children('span.priceStrike').text().replace(/[^0-9]/g,''); // 가격
-    const price = $(elem).children('span.price').text().replace(/[^0-9]/g,'');    // 세일가
+            let result = [];
+            console.log($('.designProd').length);
 
-    const productInfo = {};
-    if (old) {
-      productInfo.name = name;
-      productInfo.appendix = price; // 세일가
-      productInfo.price = old;  // 기본가
-    } else if (price) {
-      productInfo.name = name;
-      productInfo.price = price;  // 세일가
-    }else{
-      productInfo.name = name;
-      productInfo.appendix = price; // 세일가
-      productInfo.price = old;  // 기본가
-    }
-    result.list.push(productInfo);
-  });
-  return result;
+            $('.designProd').each((index, elem) => {
+                const name = $(elem).children('a').children('span').text().replace(/\s/g, '');
+                const old = $(elem).children('span.priceStrike').text().replace(/[^0-9]/g, ''); // 가격
+                const price = $(elem).children('span.price').text().replace(/[^0-9]/g, '');    // 세일가
+
+                const productInfo = {};
+                if (old) {
+                    productInfo.name = name;
+                    productInfo.appendix = price; // 세일가
+                    productInfo.price = old;  // 기본가
+                } else if (price) {
+                    productInfo.name = name;
+                    productInfo.price = price;  // 세일가
+                } else {
+                    productInfo.name = name;
+                    productInfo.appendix = price; // 세일가
+                    productInfo.price = old;  // 기본가
+                }
+                result.push(productInfo);
+            });
+            resolve(result);
+        })
+    })
 }
 
 const parse = () => {
-  return new Promise(stringGetter)
-  .then(parser);
+    return new Promise((resolve, reject) => {
+        const tvList = ['http://www.conforama.ch/rayon3_high-tech_tv--video---home-cinema_televisions-led_10051_10601_-16_42073_42119',
+            'http://www.conforama.ch/rayon3_high-tech_tv--video---home-cinema_televisions-oled_10051_10601_-16_42073_294635',
+            'http://www.conforama.ch/rayon3_high-tech_tv--video---home-cinema_televisions-qled_10051_10601_-16_42073_357635'];
+        const promises = [];
+        //console.log(tvList.length);
+        for (let i = 0; i < tvList.length; i++) {
+            //console.log(tvList[i]);
+            promises.push(parser(tvList[i]));
+        }
+        const result = {status: 'ok', list: []};
+        Promise.all(promises)
+            .then((data) => {
+                for (let i = 0; i < tvList.length; i++) {
+                    result.list = result.list.concat(data[i]);
+                }
+                resolve(result);
+            })
+            .catch((error) => {
+                reject(error);
+            })
+    });
 }
 
 module.exports.parse = parse;
