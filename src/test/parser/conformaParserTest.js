@@ -1,7 +1,7 @@
 const conformaParser = require('../../parser/conforamaParser');
 
 conformaParser.parse()
-  .then(text => console.log(text))
+  .then(result => console.log(result))
   .catch((error) => {
     console.log(error);
   });
