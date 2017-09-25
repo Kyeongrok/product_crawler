@@ -6,6 +6,7 @@ import digitecParser from '../parser/digitecParser';
 import altronParser from '../parser/altronParser';
 import melectronicsParser from '../parser/melectronicsParser';
 import brackParser from '../parser/brackParser';
+import microspotParser from '../parser/microspotParser';
 import {ipcMain} from 'electron';
 
 let mainWindow = null;
@@ -15,7 +16,8 @@ const parserMap = {
   'Conforma': conformaParse,
   'Altron': altronParser,
   'Brack': brackParser,
-  'Melectronics': melectronicsParser
+  'Melectronics': melectronicsParser,
+  'Microspot': microspotParser
 };
 
 const printHello = () => {

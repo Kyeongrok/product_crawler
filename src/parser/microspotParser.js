@@ -12,28 +12,30 @@ const getTotalNumber = () => {
     console.log('request:', 'getTotalNumber');
 
     return new Promise((resolve, reject) => {
-        request(baseRequestOptions, (error, response, html) => {
-            if (error) reject(error);
-            //console.log(html);
-            console.log('success');
+      request(baseRequestOptions, (error, response, html) => {
+        if (error) reject(error);
+        //console.log(html);
+        console.log('success');
 
-            // load website
-            let $ = null;
-            try {
-                $ = cheerio.load(html);
-            } catch (e) {
-                console.log(e)
-            }
+        // load website
+        let $ = null;
+        try {
+            $ = cheerio.load(html);
+        } catch (e) {
+            console.log(e)
+        }
 
-            // find total number of item
-            $('._1oIOyw').each(function () {
-                //console.log($(this).text());
-                const totalNumber = Number($(this).text().split('von')[1].replace(/\s/g, ''));
-                //console.log(totalNumber);
-                resolve(totalNumber)
-            });
+        // find total number of item
+        $('._1oIOyw').each(function () {
+          //console.log($(this).text());
+
+          const totalNumber = Number($(this).text().split('von')[1].replace(/\s/g, ''));
+
+            //console.log(totalNumber);
+            resolve(totalNumber)
         });
-        console.log("finish");
+      });
+      console.log("finish");
 
     });
 
@@ -46,7 +48,6 @@ const subParse = (index) => {
         uri: 'https://www.microspot.ch/de/fernseher-audio/fernseher-heimkino/fernseher--C111000/?=',
         headers: {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-
         },
     };
     requestOptions['uri'] += index
