@@ -70,7 +70,7 @@ const subParse = (index) => {
             $('._2vPjEq').each(function () {
             //console.log($(this).text());
             const name = $(this).children('div').children('h3').text();
-            const price = $(this).children('div').children('div').children('span').text().replace(/\s/g, '').replace(/[^0-9]/g, '');
+            const price = $(this).children('div').children('div').children('span').text().replace(/\s/g, '').replace(/'/g, '');
             const productInfo = {};
             if (price) {
             //console.log(price);
