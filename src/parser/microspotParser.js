@@ -68,18 +68,18 @@ const subParse = (index) => {
 
             const result = [];
             $('._2vPjEq').each(function () {
-                //console.log($(this).text());
-                const name = $(this).children('div').children('h3').text();
-                const price = $(this).children('div').children('div').children('span').text().replace(/\s/g, '').replace(/[^0-9]/g, '');
-                const productInfo = {};
-                if (price) {
-                    //console.log(price);
-                    productInfo.name = name;
-                    productInfo.price = price.replace(/[^0-9]/g, '');
-                    productInfo.currency = '';
-                    productInfo.appendix = '';
-                    result.push(productInfo);
-                }
+            //console.log($(this).text());
+            const name = $(this).children('div').children('h3').text();
+            const price = $(this).children('div').children('div').children('span').text().replace(/\s/g, '').replace(/[^0-9]/g, '');
+            const productInfo = {};
+            if (price) {
+            //console.log(price);
+            productInfo.name = name;
+            productInfo.price = price.replace(/'/g, '');
+            productInfo.currency = '';
+            productInfo.appendix = '';
+            result.push(productInfo);
+            }
             });
             //console.log(result);
             resolve(result);
