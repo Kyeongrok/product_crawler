@@ -45,7 +45,7 @@ const getTotalNumber = () => {
 const subParse = (index) => {
     const requestOptions = {
         method: 'GET',
-        uri: 'https://www.microspot.ch/de/fernseher-audio/fernseher-heimkino/fernseher--C111000/?=',
+        uri: 'https://www.microspot.ch/de/fernseher-audio/fernseher-heimkino/fernseher--C111000/?page=',
         headers: {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         },
