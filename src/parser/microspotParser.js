@@ -75,7 +75,7 @@ const subParse = (index) => {
             if (price) {
             //console.log(price);
             productInfo.name = name;
-            productInfo.price = price.replace(/[^0-9]/g,'');
+            productInfo.price = price.replace(/'/g,'');
             productInfo.currency = '';
             productInfo.appendix = '';
             result.push(productInfo);
