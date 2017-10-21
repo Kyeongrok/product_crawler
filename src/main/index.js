@@ -34,7 +34,10 @@ app.on('ready', () => {
     console.log(parserMap[eventName]);
     const parser = parserMap[eventName];
     parser.parse()
-      .then(text => mainWindow.sendText(JSON.stringify(text)))
+      .then(text => {
+        console.log(text);
+        mainWindow.sendText(JSON.stringify(text))
+      })
       .catch((error) => {
         console.log(error);
       });

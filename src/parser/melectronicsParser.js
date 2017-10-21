@@ -54,11 +54,10 @@ const parse = () => {
     console.log('melectronics');
 
     return new Promise((resolve, reject) => {
-        const promises = [];
-        brands = ['durabase', 'grundig', 'lg', 'panasonic', 'philips', 'samsung', 'sony', 'toshiba']
-        for (let i = 0; i < brands.length; i++) {
-            promises.push(subParse(brands[i]));
-        }
+      const promises = [];
+      const brands = ['durabase', 'grundig', 'lg', 'panasonic', 'philips', 'samsung', 'sony', 'toshiba']
+      brands.forEach(brand => promises.push(subParse(brand)));
+
         const result = {status: 'ok', list: []};
         Promise.all(promises)
             .then((data) => {
